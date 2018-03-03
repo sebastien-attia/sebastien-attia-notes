@@ -1,0 +1,217 @@
+---
+layout: post
+cover: 'assets/images/cover1.jpg'
+navigation: True
+title: Cheat sheet on Neural Networks 1
+date: 2017-06-28 22:14:00
+tags: machine-learning neural-network backpropagation artificial-Intelligence
+subclass: 'post tag-machine-learning tag-neural-network tag-backpropagation tag-artificial-intelligence'
+logo: 'assets/images/innovea-tech-white.svg'
+author: sebastien
+categories: sebastien
+---
+
+<div tabindex="-1" id="notebook" class="border-box-sizing">
+    <div class="container" id="notebook-container">
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Cheat-sheet-on-Neural-Networks-1">Cheat sheet on Neural Networks 1<a class="anchor-link" href="#Cheat-sheet-on-Neural-Networks-1">&#182;</a></h1><p>The following article is a cheat sheet on neural networks. My sources are based on the following course and article:</p>
+<ul>
+<li>the excellent <a href="https://www.coursera.org/learn/machine-learning">Machine Learning course</a> on Coursera from Professor Andrew Ng, Stanford,</li>
+<li>the very good <a href="http://neuralnetworksanddeeplearning.com/chap2.html">article from Michael Nielsen</a>, explaining the backpropagation algorithm.</li>
+</ul>
+
+<h2 id="Why-the-neural-networks-are-powerful-?">Why the neural networks are powerful ?<a class="anchor-link" href="#Why-the-neural-networks-are-powerful-?">&#182;</a></h2><p>It is proven mathematically that:</p>
+<blockquote><p>Suppose we’re given a [continuous] function f(x) which we’d like to compute to within some desired accuracy ϵ&gt;0. The guarantee is that by using enough hidden neurons we can always find a neural network whose output g(x) satisfies:
+|g(x)−f(x)|&lt;ϵ, for all inputs x.</p>
+</blockquote>
+<p><em>Michael Nielsen — From the following <a href="http://neuralnetworksanddeeplearning.com/chap4.html">article</a></em></p>
+<h2 id="Conventions">Conventions<a class="anchor-link" href="#Conventions">&#182;</a></h2><p>Let’s define a neural network with the following convention:</p>
+<p>L = total number of layers in the network.<br>
+$s_l$ = number of units (not counting bias unit) in layer l.<br>
+K = number of units in output layer ( = $s_L$ ).</p>
+<p><img src="/assets/images/Neural_Network_definition.png" /></p>
+<p><strong><em>With</em></strong>:</p>
+$$  
+\forall l \in\ {2, ..., L-1},\ a^{(l)} \in \mathbb{R}^{s_{l}+1} and\ 
+\begin{cases}
+a^{(l)}_0\ =\ 1\ (bias\ node)\\
+a^{(l)}_i = g(z^{(l)}_i), \forall i \in {1, ..., s_l}\\  
+\end{cases}\\
+z^{(l)}_i = [ \theta^{(l)}_i ]^T . a^{(l-1)}, \forall i \in {1, ..., s_l}\\   
+with\ \theta^{(l)}_i \in \mathbb{R}^{s_{l-1}+1}\ and\ z^{(l)} \in \mathbb{R}^{s_{l}}\ 
+$$<p>We define the matrix θ of the weights for the layer l as following:</p>
+$$
+\theta^{(l)} \in \mathbb{R}^{s_l \times (s_{(l-1)}+1)}
+$$$$
+\theta^{(l)} = 
+\begin{bmatrix}
+    [ \theta^{(l)}_1 ]^T \\
+    [ \theta^{(l)}_2 ]^T \\
+    \vdots \\
+    [ \theta^{(l)}_{s_{l}} ]^T
+\end{bmatrix} =
+\begin{bmatrix}
+    \theta_{1,0} & \dots & \theta_{1,j} & \dots  & \theta_{1,s_{l-1}} \\
+    \vdots       &       & \vdots       &        & \vdots \\
+    \theta_{i,0} & \dots & \theta_{i,j} & \dots  & \theta_{i,s_{l-1}} \\
+    \vdots       &       & \vdots       &        & \vdots \\
+    \theta_{s_l,0} & \dots & \theta_{s_l,j} & \dots  & \theta_{s_l,s_{l-1}} \\
+\end{bmatrix}
+$$<p>Hence, we have the following relation: 
+$$
+a^{(l)} =
+\left(\begin{smallmatrix}1 \\ g(\theta^{(l)}.a^{(l-1)})\end{smallmatrix}\right) \tag{0}
+$$</p>
+<h2 id="The-cost-function-of-a-Neural-Network">The cost function of a Neural Network<a class="anchor-link" href="#The-cost-function-of-a-Neural-Network">&#182;</a></h2><p>The training set is defined by: $ { (x^1,y^1), ..., (x^m,y^m) } $</p>
+<p>x and y are vectors, with respectively the same dimensions as the input and output layers of the neural network.</p>
+<p>The cost function of a neural network is the following:</p>
+$$
+J(\theta) = - \frac{1}{m} \sum_{i=1}^m \sum_{k=1}^K \left[ cost( a^{(L)}_k, y^{(i)}_k) \right] + \frac{\lambda}{2m}\sum_{l=2}^{L} \sum_{j=1}^{s_l} \sum_{i=1}^{s_{l+1}} ( \theta_{i,j}^{(l)})^2
+$$<p>$a^{(L)}_k$ is the output of the neural network, and is dependent of the weights 𝜃 of the neural network.<br>
+<strong>Please note that the regularization term does not include the weights of the bias nodes.</strong></p>
+<p>Now, the objective is to train the neural network and find the minimum of the cost function J(𝜃).</p>
+<h2 id="Mathematic-reminder:-the-chain-rule">Mathematic reminder: the chain rule<a class="anchor-link" href="#Mathematic-reminder:-the-chain-rule">&#182;</a></h2><p>Let’s define the functions f, g and h as following:</p>
+$$ f:\mathbb{R}^n \rightarrow \mathbb{R}  $$$$ g:\mathbb{R}^p \rightarrow \mathbb{R}^n $$$$ h = f \circ g $$<p>The derivative of h is given by the chain rule theorem:</p>
+$$
+\forall_i \in \{ \!1, ... , \!p \}, 
+\frac{\partial h}{\partial x_i} = 
+\sum_{k=1}^{n} \frac{\partial f}{\partial g_k} \frac{\partial g_k}{\partial x_i}
+$$<p>(See the following <a href="https://ocw.mit.edu/courses/mathematics/18-02sc-multivariable-calculus-fall-2010/2.-partial-derivatives/">course online</a> on partial derivation from the MIT)</p>
+<h2 id="The-backpropagation-algorithm">The backpropagation algorithm<a class="anchor-link" href="#The-backpropagation-algorithm">&#182;</a></h2><p>We use the <strong>gradient descent</strong> to find the minimum of J on 𝜃: $ \min\limits_{\theta} J(\theta)$</p>
+<p>The gradient descent requires to compute:</p>
+$$ \frac{\partial J(\theta)}{\partial \theta^{(l)}_{i,j}} $$<p><strong><em>In the following parts, we consider only the first part of J(θ) (as if the regularisation term λ=0). The partial derivative of the second term of J(θ) is easy to compute.</em></strong></p>
+<p>The following course from <a href="https://www.youtube.com/channel/UCPk8m_r6fkUSYmvgCBwq-sw">Andrej Karpathy</a> gives an <a href="https://youtu.be/i94OvYb6noo?t=12m20s">outstanding explaination</a> how the partial derivatives works at the level of a node in the backpropagation algorithm.</p>
+<h3 id="Definition-of-&#7839;">Definition of &#7839;<a class="anchor-link" href="#Definition-of-&#7839;">&#182;</a></h3><p>Let’s define the function ẟ. When ẟ of the layer l is multiplied by the output of the layer (l-1), we obtain the partial derivative of the cost function on θ.</p>
+<p>Let’s use the chain rule and develop this derivative on z:</p>
+$$ 
+\frac{\partial J(\theta)}{\partial \theta^{(l)}_{i,j}} 
+=
+\sum^{s_l}_{k = 1} \frac{\partial J(\theta)}{\partial z^{(l)}_k} \frac{\partial z^{(l)}_k}{\partial \theta^{(l)}_{i,j}}
+$$<p>(Remind that J is dependent of z)</p>
+<p>As: 
+$$z^{(l)}_k = [ \theta^{(l)}_k ]^T . a^{(l-1)} = \sum_{p=0}^{s_{l-1}} \theta^{(l)}_{k,p} \times a^{(l-1)}_p$$</p>
+$$\frac{\partial z^{(l)}_k}{\partial \theta^{(l)}_{i,j}} = 0\ for\ k\ ≠\ i\ and\ p\ ≠\ j\ in\ the\ sum.$$$$And\ \frac{\partial z^{(l)}_k}{\partial \theta^{(l)}_{i,j}} = a^{(l-1)}_j\ for\ k\ =\ i\ and\ p\ =\ j\ in\ the\  sum.$$<p>We define the <strong>output error 𝛿</strong>: 
+$$ 
+\delta^{(l)}_k = 
+\frac{\partial J(\theta)}{\partial z^{(l)}_k},\ \forall k \in {1, ..., s_l},\
+and\  
+\delta^{(l)} = \nabla_{z^{(l)}} J(\theta) \in \mathbb{R}^{s_{l}}
+$$</p>
+<p>So we have:</p>
+<hr>
+$$ 
+\frac{\partial J(\theta)}{\partial \theta^{(l)}_{i,j}} 
+=
+\delta^{(l)}_i . a^{(l-1)}_j
+$$<p>More specifically, for the derivatives of the bias node's weights, we have ($a^{(l)}_0 = 1,\ \forall l$):</p>
+$$ 
+\frac{\partial J(\theta)}{\partial \theta^{(l)}_{i,0}} 
+=
+\delta^{(l)}_i
+$$<hr>
+<h3 id="Value-of-&#7839;-for-the-layer-L">Value of &#7839; for the layer L<a class="anchor-link" href="#Value-of-&#7839;-for-the-layer-L">&#182;</a></h3><p>Now let’s find 𝛿 for the output layer (layer L):</p>
+$$
+\delta^L_i =  \frac{\partial J(\theta)}{\partial z^{(L)}_i} = \sum^{s_{L}}_{k = 1} \frac{\partial J(\theta)}{\partial a^{(L)}_k} \frac{\partial a^{(L)}_k}{\partial z^{(L)}_i}
+$$<p>As:</p>
+$$
+a^{(l)}_k = g(z^{(l)}_k),\ \frac{\partial a^{(L)}_k}{\partial z^{(L)}_i} = 0\ if\ k\ ≠\ i
+$$<p>Hence:</p>
+<hr>
+$$
+\delta^L_i = 
+\frac{\partial J(\theta)}{\partial a^{(L)}_i} \frac{\partial g(z^{(L)}_i)}{\partial z^{(L)}_i} =
+\frac{\partial J(\theta)}{\partial a^{(L)}_i} . g'(z^{(L)}_i)
+$$<hr>
+<h3 id="Relationship-of-&#7839;-between-the-layer-l-and-the-layer-(l-1)">Relationship of &#7839; between the layer l and the layer (l-1)<a class="anchor-link" href="#Relationship-of-&#7839;-between-the-layer-l-and-the-layer-(l-1)">&#182;</a></h3><p>Now, we try to find a relation between 𝛿 of the layer l and 𝛿 of the next layer (l+1):</p>
+$$
+\delta^{(l)}_i =  \frac{\partial J(\theta)}{\partial z^{(l)}_i} = \sum^{s_{l+1}}_{k = 1} \frac{\partial J(\theta)}{\partial z^{(l+1)}_k} \frac{\partial z^{(l+1)}_k}{\partial z^{(l)}_i}
+$$<p>With:</p>
+$$
+z^{(l+1)}_k = [ \theta^{(l+1)}_k ]^T . g(z^{(l)}_p) = \sum_{p=0}^{s_{l}} \theta^{(l+1)}_{k,p} \times g(z^{(l)}_p)
+$$<p>And:</p>
+$$
+\frac{\partial z^{(l+1)}_k}{\partial z^{(l)}_i} = \theta^{(l+1)}_{k,i} . g'(z^{(l)}_i)\ \  for\ p\ =\ i,\ else\ 0.
+$$<p>Hence:</p>
+<hr>
+$$
+\delta^{(l)}_i 
+=
+\sum^{s_{l+1}}_{k = 1} \delta^{(l+1)}_k . \theta^{(l+1)}_{k,i} . g'(z^{(l)}_i) 
+$$<hr>
+<p>The meaning of this equation is the following:</p>
+<p><img src="/content/images/2017/06/Backpropagation_algorithm_explained-1.png" /></p>
+<h3 id="The-backpropagation-algorithm-explained">The backpropagation algorithm explained<a class="anchor-link" href="#The-backpropagation-algorithm-explained">&#182;</a></h3><p>We have the following:</p>
+<ul>
+<li>we have found a function ẟ for the layer l such that when we multiply this function by the output of the layer (l-1), we obtain the partial derivative of the cost function J on the weights θ of the layer l,</li>
+<li>the function ẟ for the layer l has a relation with ẟ of the layer (l+1),</li>
+<li>as we have a training set, we can compute the values of ẟ for the layer L.</li>
+</ul>
+<p>So, we start to compute the values of ẟ for the layer L. As we have a relation between ẟ for the layer l and ẟ for the layer (l+1), we can compute the values for the layers (L-1), (L-2), …, 2.</p>
+<p>We can then compute the partial derivative of the cost function J on the weights θ of the layer l, by multiplying ẟ for the layer l by the output of the layer (l-1).</p>
+<h3 id="The-vectorized-backpropagation&#8217;s-equations">The vectorized backpropagation&#8217;s equations<a class="anchor-link" href="#The-vectorized-backpropagation&#8217;s-equations">&#182;</a></h3><p>The <strong>first equation</strong> gives the partial derivatives of J with respect to θ. We have added the regularization term.</p>
+$$
+\nabla_{\theta^{(l)}} J(\theta) = 
+\begin{bmatrix}
+    \frac{\partial J}{\partial \theta^{(l)}_{1,0}} & \dots & \frac{\partial J}{\partial \theta^{(l)}_{1,j}} & \dots  & \frac{\partial J}{\partial \theta^{(l)}_{1,s_{l-1}}} \\
+    \vdots       &       & \vdots       &        & \vdots \\
+    \frac{\partial J}{\partial \theta^{(l)}_{i,0}} & \dots & \frac{\partial J}{\partial \theta^{(l)}_{i,j}} & \dots  & \frac{\partial J}{\partial \theta^{(l)}_{i,s_{l-1}}} \\
+    \vdots       &       & \vdots       &        & \vdots \\
+    \frac{\partial J}{\partial \theta^{(l)}_{s_l,0}} & \dots & \frac{\partial J}{\partial \theta^{(l)}_{s_l,j}} & \dots  & \frac{\partial J}{\partial \theta^{(l)}_{s_l,s_{l-1}}} \\
+\end{bmatrix}
+= \delta^{(l)} \otimes [a^{(l-1)}]^T + \frac{\lambda}{m} \theta^{(l)}_{zero\ bias}
+\tag{1}
+$$<p>With $\theta^{(l)}_{zero\ bias}$ is $\theta^{(l)}$ with $\theta^{(l)}_{i,0}\ =\ 0,\ \forall i \in {1, ..., s_l}$ (the regularization term does not include the bias node's weights).</p>
+<p>The <strong>second equation</strong> gives the relation between ẟ in layer l and ẟ in layer (l+1):</p>
+$$
+\delta^{(l)} = [(\theta^{(l+1)}_{remove\ bias})^T . \delta^{(l+1)}] \odot g'(z^l) \tag{2}
+$$<p>With $\theta^{(l)}_{remove\ bias}$ is $\theta^{(l)}$ with the column of the bias nodes' weights removed.</p>
+<p>The <strong>third equation</strong> gives the value of ẟ for the layer L:</p>
+$$
+\delta^{(L)} = \nabla_{a^{(L)}} J(\theta) \odot g'(z^L) \tag{3}
+$$<h2 id="Conclusion">Conclusion<a class="anchor-link" href="#Conclusion">&#182;</a></h2><p>This cheat sheet explains the backpropagation algorithm used to train a neural network. I have created this article after following the great <a href="https://www.coursera.org/learn/machine-learning">Machine Learning’s course of Professor Andrew Ng</a> on Coursera. The conventions used in this article are not exactly the ones used in the course of Professor Ng, nor exactly the ones used in <a href="http://neuralnetworksanddeeplearning.com/chap2.html">the article of Michael Nielsen</a>.</p>
+<p>If you notice any error, please do not hesitate to contact me.</p>
+<div style="text-align: right"> To Victor, Oscar and all those who will follow </div>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+
+</div>
+</div>
+</div>
+    </div>
+  </div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
+
+<!-- Loading mathjax macro -->
+<!-- Load mathjax -->
+<script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
+<!-- MathJax configuration -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+            displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+            processEscapes: true,
+            processEnvironments: true
+        },
+        // Center justify equations in code and markdown cells. Elsewhere
+        // we use CSS to left justify single line equations in code cells.
+        displayAlign: 'center',
+        "HTML-CSS": {
+            styles: {'.MathJax_Display': {"margin": 0}},
+            linebreaks: { automatic: true }
+        }
+    });
+</script>
+<!-- End of mathjax configuration -->
