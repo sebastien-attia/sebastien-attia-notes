@@ -9,6 +9,7 @@ subclass: 'post tag-jupyter tag-ghost tag-latex'
 logo: 'assets/images/innovea-tech-white.svg'
 author: sebastien
 categories: sebastien
+disqus: true
 ---
 
 ## Or how integrate MathJax into Ghost's posts ?

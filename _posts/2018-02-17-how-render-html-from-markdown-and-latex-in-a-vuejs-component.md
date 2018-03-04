@@ -9,6 +9,7 @@ subclass: 'post tag-programming tag-web'
 logo: 'assets/images/innovea-tech-white.svg'
 author: sebastien
 categories: sebastien
+disqus: true
 ---
 
 ### How to create a VueJS component to render HTML from a source mixing Markdown and LateX ?

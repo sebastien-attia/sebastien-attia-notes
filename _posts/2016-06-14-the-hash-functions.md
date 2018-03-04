@@ -9,6 +9,7 @@ subclass: 'post tag-cryptography'
 logo: 'assets/images/innovea-tech-white.svg'
 author: sebastien
 categories: sebastien
+disqus: true
 ---
 
 # What is a hash function ?

@@ -9,6 +9,7 @@ subclass: 'post tag-programming tag-JSF tag-web'
 logo: 'assets/images/innovea-tech-white.svg'
 author: sebastien
 categories: sebastien
+disqus: true
 ---
 
 This post is based on the [excellent article](http://www.codevoila.com/post/32/customize-bootstrap-using-bootstrap-sass-and-gulp) from http://www.codevoila.com and the [following answer](https://stackoverflow.com/questions/31434885/how-to-use-font-awesome-4-x-css-file-with-jsf-browser-cant-find-font-files) in stackOverflow.
